@@ -1,3 +1,5 @@
+import enum
+import os
 from datetime import datetime, date
 from decimal import Decimal
 from typing import List, Optional
@@ -11,14 +13,23 @@ from sqlalchemy import (
     ForeignKey,
     Enum as SQLEnum,
     func,
+    create_engine,
 )
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
     mapped_column,
     relationship,
+    sessionmaker,
 )
-import enum
+
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://erp_user:erp_password@localhost:5432/restaurant_erp",
+)
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 class Base(DeclarativeBase):
